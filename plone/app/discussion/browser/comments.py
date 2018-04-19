@@ -165,6 +165,7 @@ class CommentForm(extensible.ExtensibleForm, form.Form):
 
         # some attributes are not always set
         author_name = u""
+        author_email = u""
 
         # Create comment
         comment = createObject('plone.Comment')
@@ -181,6 +182,9 @@ class CommentForm(extensible.ExtensibleForm, form.Form):
             if isinstance(author_name, str):
                 author_name = unicode(author_name, 'utf-8')
 
+        if 'author_email' in data:
+            author_email = data['author_email']
+
         # Set comment author properties for anonymous users or members
         can_reply = getSecurityManager().checkPermission('Reply to item',
                                                          context)
@@ -188,7 +192,7 @@ class CommentForm(extensible.ExtensibleForm, form.Form):
         if anon and anonymous_comments:
             # Anonymous Users
             comment.author_name = author_name
-            comment.author_email = u""
+            comment.author_email = author_email
             comment.user_notification = None
             comment.creation_date = datetime.utcnow()
             comment.modification_date = datetime.utcnow()
