@@ -388,6 +388,10 @@ def notify_moderator(obj, event):
     conversation = aq_parent(obj)
     content_object = aq_parent(conversation)
 
+    local_moderator_email = getattr(content_object, 'local_moderator', '')
+    if local_moderator_email:
+        mto = local_moderator_email
+
     # Compose email
     subject = translate(_(u"A comment has been posted."), context=obj.REQUEST)
     link_approve = obj.absolute_url() + '/@@moderate-publish-comment'
